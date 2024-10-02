@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public class FundingRaised {
     public static List<Map<String, String>> where(Map<String, String> options) throws IOException {
-        List<String[]> csvData = new ArrayList<String[]>();
+        List<String[]> csvData = new ArrayList();
         CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
-        String[] row = null;
+        String[] row;
 
         while((row = reader.readNext()) != null) {
             csvData.add(row);
