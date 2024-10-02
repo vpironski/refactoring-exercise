@@ -63,16 +63,7 @@ public class FundingRaised {
 
         for (String[] csvDatum : csvData) {
             Map<String, String> mapped = new HashMap<>();
-            mapped.put("permalink", csvDatum[0]);
-            mapped.put("company_name", csvDatum[1]);
-            mapped.put("number_employees", csvDatum[2]);
-            mapped.put("category", csvDatum[3]);
-            mapped.put("city", csvDatum[4]);
-            mapped.put("state", csvDatum[5]);
-            mapped.put("funded_date", csvDatum[6]);
-            mapped.put("raised_amount", csvDatum[7]);
-            mapped.put("raised_currency", csvDatum[8]);
-            mapped.put("round", csvDatum[9]);
+            map(mapped,csvDatum);
             output.add(mapped);
         }
 
@@ -93,78 +84,42 @@ public class FundingRaised {
         Map<String, String> mapped = new HashMap<> ();
 
         for (String[] csvDatum : csvData) {
-            if (options.containsKey("company_name")) {
-                if (csvDatum[1].equals(options.get("company_name"))) {
-                    mapped.put("permalink", csvDatum[0]);
-                    mapped.put("company_name", csvDatum[1]);
-                    mapped.put("number_employees", csvDatum[2]);
-                    mapped.put("category", csvDatum[3]);
-                    mapped.put("city", csvDatum[4]);
-                    mapped.put("state", csvDatum[5]);
-                    mapped.put("funded_date", csvDatum[6]);
-                    mapped.put("raised_amount", csvDatum[7]);
-                    mapped.put("raised_currency", csvDatum[8]);
-                    mapped.put("round", csvDatum[9]);
-                } else {
-                    continue;
-                }
+            boolean match = !options.containsKey("company_name") || csvDatum[1].equals(options.get("company_name"));
+
+            if (options.containsKey("city") && !csvDatum[4].equals(options.get("city"))) {
+                match = false;
             }
 
-            if (options.containsKey("city")) {
-                if (csvDatum[4].equals(options.get("city"))) {
-                    mapped.put("permalink", csvDatum[0]);
-                    mapped.put("company_name", csvDatum[1]);
-                    mapped.put("number_employees", csvDatum[2]);
-                    mapped.put("category", csvDatum[3]);
-                    mapped.put("city", csvDatum[4]);
-                    mapped.put("state", csvDatum[5]);
-                    mapped.put("funded_date", csvDatum[6]);
-                    mapped.put("raised_amount", csvDatum[7]);
-                    mapped.put("raised_currency", csvDatum[8]);
-                    mapped.put("round", csvDatum[9]);
-                } else {
-                    continue;
-                }
+            if (options.containsKey("state") && !csvDatum[5].equals(options.get("state"))) {
+                match = false;
             }
 
-            if (options.containsKey("state")) {
-                if (csvDatum[5].equals(options.get("state"))) {
-                    mapped.put("permalink", csvDatum[0]);
-                    mapped.put("company_name", csvDatum[1]);
-                    mapped.put("number_employees", csvDatum[2]);
-                    mapped.put("category", csvDatum[3]);
-                    mapped.put("city", csvDatum[4]);
-                    mapped.put("state", csvDatum[5]);
-                    mapped.put("funded_date", csvDatum[6]);
-                    mapped.put("raised_amount", csvDatum[7]);
-                    mapped.put("raised_currency", csvDatum[8]);
-                    mapped.put("round", csvDatum[9]);
-                } else {
-                    continue;
-                }
+            if (options.containsKey("round") && !csvDatum[9].equals(options.get("round"))) {
+                match = false;
             }
 
-            if (options.containsKey("round")) {
-                if (csvDatum[9].equals(options.get("round"))) {
-                    mapped.put("permalink", csvDatum[0]);
-                    mapped.put("company_name", csvDatum[1]);
-                    mapped.put("number_employees", csvDatum[2]);
-                    mapped.put("category", csvDatum[3]);
-                    mapped.put("city", csvDatum[4]);
-                    mapped.put("state", csvDatum[5]);
-                    mapped.put("funded_date", csvDatum[6]);
-                    mapped.put("raised_amount", csvDatum[7]);
-                    mapped.put("raised_currency", csvDatum[8]);
-                    mapped.put("round", csvDatum[9]);
-                } else {
-                    continue;
-                }
+            // If all conditions matched, fill the mapped data
+            if (match) {
+                map(mapped,csvDatum);
+                return mapped; // Return early once the first match is found
             }
-
-            return mapped;
         }
 
+
         throw new NoSuchEntryException();
+    }
+
+    private static void map(Map<String, String> mapped, String[] csvDatum){
+        mapped.put("permalink", csvDatum[0]);
+        mapped.put("company_name", csvDatum[1]);
+        mapped.put("number_employees", csvDatum[2]);
+        mapped.put("category", csvDatum[3]);
+        mapped.put("city", csvDatum[4]);
+        mapped.put("state", csvDatum[5]);
+        mapped.put("funded_date", csvDatum[6]);
+        mapped.put("raised_amount", csvDatum[7]);
+        mapped.put("raised_currency", csvDatum[8]);
+        mapped.put("round", csvDatum[9]);
     }
 
     public static void main(String[] args) {
