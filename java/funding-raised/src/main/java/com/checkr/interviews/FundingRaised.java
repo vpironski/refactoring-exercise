@@ -1,26 +1,15 @@
 package com.checkr.interviews;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import com.opencsv.CSVReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class FundingRaised {
-    public static List<Map<String, String>> where(Map<String, String> options) throws IOException {
-        List<String[]> csvData = new ArrayList<>();
-        CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
-        String[] row;
-
-        while((row = reader.readNext()) != null) {
-            csvData.add(row);
-        }
-
-        reader.close();
-        csvData.remove(0);
-
+    public static List<Map<String, String>> where(Map<String, String> options, List<String[]> csvData) throws IOException {
         List<String[]> results = new ArrayList<> ();
         if(options.containsKey("company_name")) {
-
 
             for (String[] csvDatum : csvData) {
                 if (csvDatum[1].equals(options.get("company_name"))) {
@@ -80,17 +69,7 @@ public class FundingRaised {
         return output;
     }
 
-    public static Map<String, String> findBy(Map<String, String> options) throws IOException, NoSuchEntryException {
-        List<String[]> csvData = new ArrayList<>();
-        CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
-        String[] row;
-
-        while((row = reader.readNext()) != null) {
-            csvData.add(row);
-        }
-
-        reader.close();
-        csvData.remove(0);
+    public static Map<String, String> findBy(Map<String, String> options, List<String[]> csvData) throws IOException, NoSuchEntryException {
         Map<String, String> mapped = new HashMap<> ();
 
         for (String[] csvDatum : csvData) {
@@ -168,12 +147,28 @@ public class FundingRaised {
         throw new NoSuchEntryException();
     }
 
+    private static List<String[]> getFromCsv () throws IOException {
+        List<String[]> csvData = new ArrayList<>();
+        CSVReader reader = new CSVReader(new FileReader("startup_funding.csv"));
+        String[] row;
+
+        while((row = reader.readNext()) != null) {
+            csvData.add(row);
+        }
+
+        reader.close();
+        csvData.remove(0);
+
+        return csvData;
+    }
+
     public static void main(String[] args) {
         try {
+            List<String[]> csvData = FundingRaised.getFromCsv();
             Map<String, String> options = new HashMap<> ();
             options.put("company_name", "Facebook");
             options.put("round", "a");
-            System.out.print(FundingRaised.where(options).size());
+            System.out.print(FundingRaised.where(options, csvData).size());
         } catch(IOException e) {
             System.out.print(e.getMessage());
             System.out.print("error");
