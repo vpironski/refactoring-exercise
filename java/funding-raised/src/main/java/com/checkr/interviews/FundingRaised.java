@@ -18,8 +18,9 @@ public class FundingRaised {
         reader.close();
         csvData.remove(0);
 
+        List<String[]> results = new ArrayList<> ();
         if(options.containsKey("company_name")) {
-            List<String[]> results = new ArrayList<> ();
+
 
             for (String[] csvDatum : csvData) {
                 if (csvDatum[1].equals(options.get("company_name"))) {
@@ -30,7 +31,6 @@ public class FundingRaised {
         }
 
         if(options.containsKey("city")) {
-            List<String[]> results = new ArrayList<> ();
 
             for (String[] csvDatum : csvData) {
                 if (csvDatum[4].equals(options.get("city"))) {
@@ -41,7 +41,6 @@ public class FundingRaised {
         }
 
         if(options.containsKey("state")) {
-            List<String[]> results = new ArrayList<> ();
 
             for (String[] csvDatum : csvData) {
                 if (csvDatum[5].equals(options.get("state"))) {
@@ -52,7 +51,6 @@ public class FundingRaised {
         }
 
         if(options.containsKey("round")) {
-            List<String[]> results = new ArrayList<> ();
 
             for (String[] csvDatum : csvData) {
                 if (csvDatum[9].equals(options.get("round"))) {
